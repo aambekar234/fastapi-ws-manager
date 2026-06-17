@@ -2,11 +2,11 @@
 name = "fastapi-ws-manager"
 version = "0.1.0"
 description = "Pluggable FastAPI websocket management helpers with auth, client-timeout liveness, and connection pooling."
-authors = ["Abhi <abhi@example.com>"]
+authors = ["Abhijeet Ambekar"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/<org>/<repo>"
-repository = "https://github.com/<org>/<repo>"
+homepage = "https://github.com/aambekar234/fastapi-ws-manager"
+repository = "https://github.com/aambekar234/fastapi-ws-manager"
 packages = [{ include = "fastapi_ws_manager", from = "src" }]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -35,3 +35,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:tool.poetry.version"]
+commit_parser = "conventional"
+build_command = "pip install poetry && poetry build"
+major_on_zero = false
+allow_zero_version = true
+
+[tool.semantic_release.branches.main]
+match = "main"

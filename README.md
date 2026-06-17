@@ -22,16 +22,16 @@ with both pip and Poetry:
 
 ```bash
 # pip
-pip install "https://github.com/<org>/<repo>/releases/download/v0.1.0/fastapi_ws_manager-0.1.0-py3-none-any.whl"
+pip install "https://github.com/aambekar234/fastapi-ws-manager/releases/download/v0.1.0/fastapi_ws_manager-0.1.0-py3-none-any.whl"
 
 # Poetry (pin the release URL)
-poetry add "https://github.com/<org>/<repo>/releases/download/v0.1.0/fastapi_ws_manager-0.1.0-py3-none-any.whl"
+poetry add "https://github.com/aambekar234/fastapi-ws-manager/releases/download/v0.1.0/fastapi_ws_manager-0.1.0-py3-none-any.whl"
 ```
 
 Or install from a git tag:
 
 ```bash
-poetry add "git+https://github.com/<org>/<repo>.git@v0.1.0"
+poetry add "git+https://github.com/aambekar234/fastapi-ws-manager.git@v0.1.0"
 ```
 
 For local development in this repository:
@@ -129,20 +129,28 @@ The `subject` you put on `TokenClaims` is what `connection.user_id` returns.
 
 ## Releasing
 
-Releases are built and published by GitHub Actions when you push a version tag:
+Releases are fully automated by GitHub Actions. There is **no manual version bump
+or tagging** — just merge to `main` with [conventional commit](https://www.conventionalcommits.org)
+messages and the rest happens for you.
 
-1. Bump `version` in `pyproject.toml` (e.g. `0.2.0`).
-2. Commit, then tag and push:
+When you merge a pull request into `main`, the `release` workflow runs the test
+suite and then [python-semantic-release](https://python-semantic-release.readthedocs.io)
+inspects the commits since the last release. It computes the next version, updates
+`pyproject.toml` and `CHANGELOG.md`, creates the `vX.Y.Z` tag, runs `poetry build`,
+and publishes a GitHub Release with the wheel + sdist attached. If no
+release-worthy commits are present, nothing is released.
 
-   ```bash
-   git commit -am "Release 0.2.0"
-   git tag v0.2.0
-   git push origin main --tags
-   ```
+The bump level comes from the commit messages (squash-merge is recommended so the
+squash subject drives the bump):
 
-The `release` workflow verifies the tag matches `pyproject.toml`, runs
-`poetry build`, and attaches the wheel + sdist to a GitHub Release. The `ci`
-workflow runs the test suite on every pull request and push to `main`.
+| Commit prefix                       | Effect                                   |
+| ----------------------------------- | ---------------------------------------- |
+| `fix: ...`                          | patch release (`0.1.0` → `0.1.1`)        |
+| `feat: ...`                         | minor release (`0.1.0` → `0.2.0`)        |
+| `feat!: ...` / `BREAKING CHANGE:`   | minor while `0.x` (`major_on_zero` off)  |
+| `chore:`, `docs:`, `test:`, ...     | no release                               |
+
+The `ci` workflow runs the test suite on every pull request.
 
 ## Notes
 
