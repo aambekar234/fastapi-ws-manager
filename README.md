@@ -61,7 +61,7 @@ manager = WebSocketManager(
 		issuer="https://your-project.supabase.co/auth/v1",
 	),
 	config=WebSocketManagerConfig(
-		max_connections=500,
+		max_connections=100,
 		client_timeout_seconds=30,
 	),
 )
