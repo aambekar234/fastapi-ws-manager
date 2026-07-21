@@ -8,6 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/aambekar234/fastapi-ws-manager"
 repository = "https://github.com/aambekar234/fastapi-ws-manager"
 packages = [{ include = "fastapi_ws_manager", from = "src" }]
+include = [{ path = "src/fastapi_ws_manager/py.typed", format = ["sdist", "wheel"] }]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

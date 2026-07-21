@@ -149,6 +149,16 @@ def test_idle_client_is_dropped() -> None:
         assert exc.value.code == 4408
 
 
+def test_disabled_liveness_keeps_connection_open() -> None:
+    with TestClient(_app(client_timeout_seconds=0)) as client:
+        with client.websocket_connect(f"/ws?token={_token()}") as websocket:
+            # Longer than any would-be timeout window; with liveness disabled
+            # the silent connection must survive and still serve requests.
+            time.sleep(0.3)
+            websocket.send_json({"type": "echo"})
+            assert websocket.receive_json() == {"type": "echo", "user_id": "user-1"}
+
+
 def test_active_client_stays_connected() -> None:
     with TestClient(_app(client_timeout_seconds=0.3)) as client:
         with client.websocket_connect(f"/ws?token={_token()}") as websocket:

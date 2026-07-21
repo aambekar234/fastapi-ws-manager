@@ -120,10 +120,14 @@ class WebSocketManager:
             token = _active_manager.set(self)
 
             handler_task = asyncio.create_task(handler(managed))
-            monitor_task = asyncio.create_task(self._monitor_liveness(managed))
+            # With liveness disabled the monitor would return immediately and,
+            # via FIRST_COMPLETED below, cancel the handler — so don't spawn it.
+            wait_set: set[asyncio.Task] = {handler_task}
+            if self.config.client_timeout_seconds > 0:
+                wait_set.add(asyncio.create_task(self._monitor_liveness(managed)))
             try:
                 done, pending = await asyncio.wait(
-                    {handler_task, monitor_task},
+                    wait_set,
                     return_when=asyncio.FIRST_COMPLETED,
                 )
                 for task in pending:
