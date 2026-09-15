@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-ws-manager"
-version = "0.1.1"
+version = "0.2.0"
 description = "Pluggable FastAPI websocket management helpers with auth, client-timeout liveness, and connection pooling."
 authors = ["Abhijeet Ambekar"]
 license = "MIT"
